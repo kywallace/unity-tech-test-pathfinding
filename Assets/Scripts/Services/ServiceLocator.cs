@@ -5,6 +5,11 @@ using System;
 
 namespace Services
 {
+	/// <summary>
+	/// The service locator using the locator pattern to make it easier to have access to
+	/// services with out having to pass them into constructors or making the services into
+	/// static or signleton classes.
+	/// </summary>
 	internal class ServiceLocator
 	{
 		private static ServiceLocator? _locator = null;

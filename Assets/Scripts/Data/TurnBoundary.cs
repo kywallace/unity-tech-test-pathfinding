@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace Data
 {
+	/// <summary>
+	/// This class contains data for a turn boundary in the path. This data helps smooth out the
+	/// pathing of the player's object as it is following the path.
+	/// </summary>
 	public struct TurnBoundary
 	{
 		private const float VerticalLineGradient = 1e5f;

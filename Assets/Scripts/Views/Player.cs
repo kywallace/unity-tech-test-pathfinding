@@ -9,6 +9,11 @@ using UnityEngine;
 
 namespace Views
 {
+	/// <summary>
+	/// The visiual representation of the player and handles user input. Note: To better follow the MVC pattern
+	/// the user input should be moved to a input controller and the business logic should be moved to a player
+	/// controller that manages this view.
+	/// </summary>
 	public class Player : MonoBehaviour
 	{
 		private const float PathUpdateMoveThreshold = 0.5f;
@@ -30,6 +35,11 @@ namespace Views
 			UpdatePath(this.GetCancellationTokenOnDestroy()).Forget();
 		}
 
+		/// <summary>
+		/// Waits for user input to then attempt to pathfind to the click on the nav grid.
+		/// </summary>
+		/// <param name="token"></param>
+		/// <returns></returns>
 		private async UniTaskVoid UpdatePath(CancellationToken token)
 		{
 			float sqrMoveThreshold = PathUpdateMoveThreshold * PathUpdateMoveThreshold;
@@ -64,6 +74,11 @@ namespace Views
 			}
 		}
 
+		/// <summary>
+		/// Move the player's object along the found path.
+		/// </summary>
+		/// <param name="token"></param>
+		/// <returns></returns>
 		private async UniTaskVoid FollowPathAsync(CancellationToken token)
 		{
 			bool followingPath = true;

@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Views
 {
+	/// <summary>
+	/// The visiual representation of the random generated maze cell data.
+	/// </summary>
 	public class Walls : MonoBehaviour
 	{
 		[SerializeField]

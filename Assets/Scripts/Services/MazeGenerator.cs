@@ -7,8 +7,17 @@ using UnityEngine;
 
 namespace Services
 {
+	/// <summary>
+	/// This class generates a random maze.
+	/// </summary>
 	public class MazeGenerator : IMazeGenerator
 	{
+		/// <summary>
+		/// Generate a random maze from the given width and depth of the maze.
+		/// </summary>
+		/// <param name="width"></param>
+		/// <param name="depth"></param>
+		/// <returns></returns>
 		public MazeCell[,] GenerateMaze(int width, int depth)
 		{
 			MazeCell[,] mazeGrid = new MazeCell[width, depth];
@@ -26,6 +35,12 @@ namespace Services
 			return mazeGrid;
 		}
 
+		/// <summary>
+		/// Builds out the random maze.
+		/// </summary>
+		/// <param name="mazeGrid"></param>
+		/// <param name="previousCell"></param>
+		/// <param name="currentCell"></param>
 		private void BuildMaze(MazeCell[,] mazeGrid, MazeCell? previousCell, MazeCell currentCell)
 		{
 			currentCell.Visit();
@@ -45,12 +60,24 @@ namespace Services
 			while (nextCell != null);
 		}
 
+		/// <summary>
+		/// Gets a random next unvisited maze cell from the current name cell.
+		/// </summary>
+		/// <param name="mazeGrid"></param>
+		/// <param name="currentCell"></param>
+		/// <returns></returns>
 		private MazeCell GetNextUnvisitedCell(MazeCell[,] mazeGrid, MazeCell currentCell)
 		{
 			List<MazeCell> unvisitedCells = GetUnvisitedCells(mazeGrid, currentCell);
 			return unvisitedCells.OrderBy(_ => Random.Range(1, 10)).FirstOrDefault();
 		}
 
+		/// <summary>
+		/// Get a list of unvisited maze cells around the current maze cell.
+		/// </summary>
+		/// <param name="mazeGrid"></param>
+		/// <param name="currentCell"></param>
+		/// <returns></returns>
 		private List<MazeCell> GetUnvisitedCells(MazeCell[,] mazeGrid, MazeCell currentCell)
 		{
 			List<MazeCell> unvisitedCells = new();
@@ -97,6 +124,11 @@ namespace Services
 			return unvisitedCells;
 		}
 
+		/// <summary>
+		/// Clear maze cell walls give the previous and current maze cell.
+		/// </summary>
+		/// <param name="previousCell"></param>
+		/// <param name="currentCell"></param>
 		private void ClearWalls(MazeCell? previousCell, MazeCell currentCell)
 		{
 			if (previousCell == null)

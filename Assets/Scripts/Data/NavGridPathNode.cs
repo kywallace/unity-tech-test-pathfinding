@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Data
 {
+	/// <summary>
+	/// This class contains data for a single pathing node in the nav grid.
+	/// </summary>
 	public class NavGridPathNode : IHeapItem<NavGridPathNode>
 	{
 		public bool Walkable { get; private set; }
@@ -39,11 +42,7 @@ namespace Data
 		public int CompareTo(NavGridPathNode nodeToCompare)
 		{
 			int compare = FScore.CompareTo(nodeToCompare.FScore);
-			if (compare == 0)
-			{
-				compare = HScore.CompareTo(nodeToCompare.HScore);
-			}
-			return -compare;
+			return compare == 0 ? HScore.CompareTo(nodeToCompare.HScore) : compare;
 		}
 	}
 }

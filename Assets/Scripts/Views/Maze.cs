@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace Views
 {
+	/// <summary>
+	/// The visiual representation of the random generated maze data.
+	/// </summary>
 	public class Maze : MonoBehaviour
 	{
 		[SerializeField]
@@ -20,7 +23,6 @@ namespace Views
 		[SerializeField]
 		private int _scale;
 
-		// 12 12 4 -22 -22
 		public void CreateMaze()
 		{
 			MazeCell[,] mazeGrid = ServiceLocator.Instance.GetService<IMazeGenerator>().GenerateMaze(_width, _depth);

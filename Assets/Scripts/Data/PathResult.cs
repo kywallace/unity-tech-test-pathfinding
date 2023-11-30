@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Data
 {
+	/// <summary>
+	/// This class contains data for the found path result from the pathfinding.
+	/// </summary>
 	public struct PathResult
 	{
 		public bool Success;

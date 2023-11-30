@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace Views
 {
+	/// <summary>
+	/// The nav grid for the pathfinding.
+	/// </summary>
 	public class NavGrid : MonoBehaviour
 	{
 		private const int BlurSize = 3;
@@ -31,6 +34,9 @@ namespace Views
 
 		public int MaxSize => _gridSizeX * _gridSizeY;
 
+		/// <summary>
+		/// In awake setup the nav grid from the mesh renderer.
+		/// </summary>
 		void Awake()
 		{
 			MeshRenderer? renderer = GetComponent<MeshRenderer>();
@@ -41,6 +47,10 @@ namespace Views
 			_gridSizeY = Mathf.RoundToInt(_gridWorldSize.z / _nodeDiameter);
 		}
 
+		/// <summary>
+		/// Setup the grid pathing nodes based on the unpathable objects on the nav grid and
+		/// blur the penalty values from the unpathable objects.
+		/// </summary>
 		public void CreateGrid()
 		{
 			_grid = new NavGridPathNode[_gridSizeX, _gridSizeY];
@@ -66,7 +76,57 @@ namespace Views
 			BlurPenaltyMap(BlurSize);
 		}
 
-		void BlurPenaltyMap(int blurSize)
+		/// <summary>
+		/// Get the neighboring pathing nodes around the given path node.
+		/// </summary>
+		/// <param name="node"></param>
+		/// <returns></returns>
+		public List<NavGridPathNode> GetNeighbor(NavGridPathNode node)
+		{
+			List<NavGridPathNode> neighbors = new();
+
+			for (int x = -1; x <= 1; x++)
+			{
+				for (int y = -1; y <= 1; y++)
+				{
+					if (x == 0 && y == 0)
+					{
+						continue;
+					}
+
+					int checkX = node.GridX + x;
+					int checkY = node.GridY + y;
+
+					if (checkX >= 0 && checkX < _gridSizeX && checkY >= 0 && checkY < _gridSizeY)
+					{
+						neighbors.Add(_grid![checkX, checkY]);
+					}
+				}
+			}
+
+			return neighbors;
+		}
+
+		/// <summary>
+		/// Get the path node from the given world point.
+		/// </summary>
+		/// <param name="worldPosition"></param>
+		/// <returns></returns>
+		public NavGridPathNode NodeFromWorldPoint(Vector3 worldPosition)
+		{
+			float percentX = Mathf.Clamp01((worldPosition.x + _gridWorldSize.x / 2) / _gridWorldSize.x);
+			float percentY = Mathf.Clamp01((worldPosition.z + _gridWorldSize.z / 2) / _gridWorldSize.z);
+			int x = Mathf.RoundToInt((_gridSizeX - 1) * percentX);
+			int y = Mathf.RoundToInt((_gridSizeY - 1) * percentY);
+			return _grid![x, y];
+		}
+
+		/// <summary>
+		/// Setup the blur penalty map for the nav grid to soften the penalties around the
+		/// unpathable objects.
+		/// </summary>
+		/// <param name="blurSize"></param>
+		private void BlurPenaltyMap(int blurSize)
 		{
 			int kernelSize = blurSize * 2 + 1;
 			int kernelExtents = (kernelSize - 1) / 2;
@@ -121,41 +181,6 @@ namespace Views
 					}
 				}
 			}
-		}
-
-		public List<NavGridPathNode> GetNeighbours(NavGridPathNode node)
-		{
-			List<NavGridPathNode> neighbours = new();
-
-			for (int x = -1; x <= 1; x++)
-			{
-				for (int y = -1; y <= 1; y++)
-				{
-					if (x == 0 && y == 0)
-					{
-						continue;
-					}
-
-					int checkX = node.GridX + x;
-					int checkY = node.GridY + y;
-
-					if (checkX >= 0 && checkX < _gridSizeX && checkY >= 0 && checkY < _gridSizeY)
-					{
-						neighbours.Add(_grid![checkX, checkY]);
-					}
-				}
-			}
-
-			return neighbours;
-		}
-
-		public NavGridPathNode NodeFromWorldPoint(Vector3 worldPosition)
-		{
-			float percentX = Mathf.Clamp01((worldPosition.x + _gridWorldSize.x / 2) / _gridWorldSize.x);
-			float percentY = Mathf.Clamp01((worldPosition.z + _gridWorldSize.z / 2) / _gridWorldSize.z);
-			int x = Mathf.RoundToInt((_gridSizeX - 1) * percentX);
-			int y = Mathf.RoundToInt((_gridSizeY - 1) * percentY);
-			return _grid![x, y];
 		}
 	}
 }

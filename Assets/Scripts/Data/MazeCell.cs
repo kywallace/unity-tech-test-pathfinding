@@ -2,6 +2,9 @@
 
 namespace Data
 {
+	/// <summary>
+	/// This class contains data for a single cell of the generated maze.
+	/// </summary>
 	public class MazeCell
 	{
 		public int X { get; private set; }

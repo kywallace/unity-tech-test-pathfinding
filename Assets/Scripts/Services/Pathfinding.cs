@@ -12,15 +12,28 @@ using Views;
 
 namespace Services
 {
+	/// <summary>
+	/// This is an implementation of the A* pathing algorithm.
+	/// </summary>
 	public class Pathfinding : IPathfinding
 	{
 		private readonly NavGrid _grid;
 
+		/// <summary>
+		/// Constructor to assign the nav grid that the pathing algorithm will find paths on.
+		/// </summary>
+		/// <param name="grid"></param>
 		public Pathfinding(NavGrid grid)
 		{
 			_grid = grid;
 		}
-
+		
+		/// <summary>
+		/// Find the path of the give path context.
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="token"></param>
+		/// <returns></returns>
 		public async UniTask<PathResult> FindPathAsyn(PathContext context, CancellationToken token)
 		{
 			Vector3[] waypoints = new Vector3[0];
@@ -32,6 +45,8 @@ namespace Services
 
 			if (startNode.Walkable && targetNode.Walkable)
 			{
+				// Run this on a separate thread to not affect the FPS performance of the game. If this is a single threaded device
+				// then this will time slice the work to again not affect the FPS performance of the game.
 				await UniTask.RunOnThreadPool(() =>
 				{
 					Heap<NavGridPathNode> openSet = new(_grid.MaxSize);
@@ -49,27 +64,27 @@ namespace Services
 							break;
 						}
 
-						foreach (NavGridPathNode neighbour in _grid.GetNeighbours(currentNode))
+						foreach (NavGridPathNode neighbor in _grid.GetNeighbor(currentNode))
 						{
-							if (!neighbour.Walkable || closedSet.Contains(neighbour))
+							if (!neighbor.Walkable || closedSet.Contains(neighbor))
 							{
 								continue;
 							}
 
-							int newMovementCostToNeighbour = currentNode.GScore + GetDistance(currentNode, neighbour) + neighbour.MovementPenalty;
-							if (newMovementCostToNeighbour < neighbour.GScore || !openSet.Contains(neighbour))
+							int newMovementCostToNeighbor = currentNode.GScore + GetDistance(currentNode, neighbor) + neighbor.MovementPenalty;
+							if (newMovementCostToNeighbor < neighbor.GScore || !openSet.Contains(neighbor))
 							{
-								neighbour.GScore = newMovementCostToNeighbour;
-								neighbour.HScore = GetDistance(neighbour, targetNode);
-								neighbour.Parent = currentNode;
+								neighbor.GScore = newMovementCostToNeighbor;
+								neighbor.HScore = GetDistance(neighbor, targetNode);
+								neighbor.Parent = currentNode;
 
-								if (!openSet.Contains(neighbour))
+								if (!openSet.Contains(neighbor))
 								{
-									openSet.Add(neighbour);
+									openSet.Add(neighbor);
 								}
 								else
 								{
-									openSet.UpdateItem(neighbour);
+									openSet.UpdateItem(neighbor);
 								}
 							}
 						}
@@ -86,6 +101,13 @@ namespace Services
 			return new PathResult(pathSuccess, waypoints);
 		}
 
+		/// <summary>
+		/// Retraces the found path and simplify the found path to produce the waypoints that the
+		/// player's object will follow.
+		/// </summary>
+		/// <param name="startNode"></param>
+		/// <param name="endNode"></param>
+		/// <returns></returns>
 		private Vector3[] RetracePath(NavGridPathNode startNode, NavGridPathNode endNode)
 		{
 			List<NavGridPathNode> path = new();
@@ -102,6 +124,12 @@ namespace Services
 			return waypoints;
 		}
 
+		/// <summary>
+		/// Simplify the path by removing path nodes that don't change the direction of
+		/// the path.
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns></returns>
 		private Vector3[] SimplifyPath(List<NavGridPathNode> path)
 		{
 			List<Vector3> waypoints = new();
