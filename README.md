@@ -53,3 +53,17 @@ When you have completed the project, please follow these guidelines for submissi
 Feel free to be creative in how you approach this project. Your solution will be evaluated based on code quality, efficiency, and how well it meets the specified requirements.
 
 Good luck, and we look forward to seeing your Unity pathfinding project! If you have any questions or need clarifications, please reach out to us.
+
+## Playing the game
+
+Open the project in Unity version 2022.3.9f1 or higher. Once the project has loaded just hit play in the editor to play the game.
+
+## Notes
+
+* The pathfinding is using the A* algorithm with turn boundaries to smooth out the pathing.
+* An implementation of a min heap was used in the pathfinding algorithm to optimize searches in the open set.
+* The nav grid is using penalty bluring to soften the penalties on the path nodes around the unpathable objects on the nav grid.
+* A maze generator is being used to create a random generated maze for the player to path through.
+* A locator pattern was used to map service interfaces to concrete implementations of the service interfaces to allow classes to get the instance of the service by interface without needing to know the exact concrete implementation of the service.
+* MVC pattern was used in most places, but more work is need to completely follow the MVC pattern for all views.
+* UniTask was used to handle async tasks in the game to prevent FPS drops when running large computational work in the game.
