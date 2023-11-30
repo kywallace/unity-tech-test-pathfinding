@@ -44,9 +44,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8739303695474408396}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d342102a7d73846be98feab259fa701a, type: 3}
+  m_Script: {fileID: 11500000, guid: fd4ceb14a7959f045aad6bd724a722de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _unpathableMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _nodeRadius: 0.25
+  _obstacleProximityPenalty: 20
 --- !u!33 &8008446211032595862
 MeshFilter:
   m_ObjectHideFlags: 0

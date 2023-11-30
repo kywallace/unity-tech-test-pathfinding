@@ -152,12 +152,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3271883727968293047}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c9b68fef76704868bbca95f7bd4dd73, type: 3}
+  m_Script: {fileID: 11500000, guid: e8dfe3c79bc250c4181a0c0d666f34ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Grid: {fileID: 0}
-  Destination: {x: 0, y: 0, z: 0}
-  Speed: 10
+  _speed: 15
+  _turnSpeed: 15
+  _turnDistance: 1
 --- !u!33 &8618333106129401312
 MeshFilter:
   m_ObjectHideFlags: 0
